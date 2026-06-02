@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Uniqlo Oversized T-Shirt",
+    "description": "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+    "price": 199000,
+    "stock": 50,
+    "imgUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+    "categoryId": 1,
+    "authorId": 1
+  },
+  {
+    "name": "H&M Basic Crew Neck T-Shirt",
+    "description": "Soft cotton t-shirt with a classic crew neck design for a clean and versatile look.",
+    "price": 149000,
+    "stock": 40,
+    "imgUrl": "https://images.unsplash.com/photo-1576566588028-4147f3842f27",
+    "categoryId": 1,
+    "authorId": 1
+  },
+  {
+    "name": "Zara Slim Fit Shirt",
+    "description": "Modern slim-fit shirt crafted from lightweight fabric, perfect for smart casual occasions.",
+    "price": 499000,
+    "stock": 25,
+    "imgUrl": "https://images.unsplash.com/photo-1603252109303-2751441dd157",
+    "categoryId": 2,
+    "authorId": 2
+  },
+  {
+    "name": "Uniqlo Oxford Shirt",
+    "description": "Classic oxford shirt with a timeless design suitable for office and casual settings.",
+    "price": 399000,
+    "stock": 30,
+    "imgUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c",
+    "categoryId": 2,
+    "authorId": 2
+  },
+  {
+    "name": "H&M Relaxed Hoodie",
+    "description": "Comfortable hoodie featuring a soft fleece interior and adjustable drawstring hood.",
+    "price": 349000,
+    "stock": 35,
+    "imgUrl": "https://images.unsplash.com/photo-1556821840-3a63f95609a7",
+    "categoryId": 3,
+    "authorId": 3
+  },
+  {
+    "name": "Zara Zip-Up Hoodie",
+    "description": "Minimalist zip-up hoodie designed for layering and everyday comfort.",
+    "price": 599000,
+    "stock": 20,
+    "imgUrl": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633",
+    "categoryId": 3,
+    "authorId": 3
+  },
+  {
+    "name": "Uniqlo Ultra Light Jacket",
+    "description": "Lightweight jacket with excellent insulation, ideal for travel and outdoor activities.",
+    "price": 899000,
+    "stock": 18,
+    "imgUrl": "https://images.unsplash.com/photo-1548883354-94bcfe321cbb",
+    "categoryId": 4,
+    "authorId": 1
+  },
+  {
+    "name": "Zara Bomber Jacket",
+    "description": "Stylish bomber jacket with a contemporary silhouette and durable construction.",
+    "price": 1299000,
+    "stock": 12,
+    "imgUrl": "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504",
+    "categoryId": 4,
+    "authorId": 2
+  },
+  {
+    "name": "H&M Slim Fit Chinos",
+    "description": "Slim fit chino pants made from stretch cotton fabric for maximum comfort.",
+    "price": 399000,
+    "stock": 28,
+    "imgUrl": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a",
+    "categoryId": 5,
+    "authorId": 3
+  },
+  {
+    "name": "Uniqlo Smart Ankle Pants",
+    "description": "Modern ankle-length pants with a clean silhouette suitable for work or casual wear.",
+    "price": 499000,
+    "stock": 22,
+    "imgUrl": "https://images.unsplash.com/photo-1506629905607-c9d6b2f7d7f3",
+    "categoryId": 5,
+    "authorId": 1
+  }
+]

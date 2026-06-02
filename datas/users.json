@@ -1,0 +1,26 @@
+[
+  {
+    "username": "admin",
+    "email": "admin@store.com",
+    "password": "password123",
+    "role": "Staff",
+    "phoneNumber": "081234567890",
+    "address": "Jakarta"
+  },
+  {
+    "username": "lala",
+    "email": "lala@gmail.com",
+    "password": "password123",
+    "role": "Staff",
+    "phoneNumber": "081298765432",
+    "address": "Bandung"
+  },
+  {
+    "username": "john",
+    "email": "john@example.com",
+    "password": "password123",
+    "role": "Staff",
+    "phoneNumber": "081377788899",
+    "address": "Surabaya"
+  }
+]
