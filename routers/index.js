@@ -10,7 +10,8 @@ router.get("/pub/product", publicController.getProduct);
 router.get("/pub/category", publicController.getCategory);
 router.get("/pub/:id", publicController.detailProduct);
 
-router.use("/user", userController);
+router.post("/add-user", userController.addUser);
+router.post("/login", userController.login);
 
 router.use("/product", routerProduct);
 router.use("/category", routerCategory);

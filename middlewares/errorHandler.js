@@ -13,6 +13,11 @@ function errorHandler(error, req, res, next) {
     message = `Data with id ${error.id} not found`;
   }
 
+  // unique
+  if (error.name == "SequelizeUniqueConstraintError") {
+    status = 400;
+    message = error.message;
+  }
   res.status(500).json({
     message,
   });
