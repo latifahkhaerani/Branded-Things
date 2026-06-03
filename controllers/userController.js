@@ -20,7 +20,7 @@ class userController {
       delete createUser.dataValues.createdAt;
       delete createUser.dataValues.updatedAt;
 
-      res.status(200).json({
+      res.status(201).json({
         message: "Success add new user!",
         data: createUser,
       });
