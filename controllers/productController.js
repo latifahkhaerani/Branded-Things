@@ -1,4 +1,4 @@
-const { Product, User, Category } = require("../models");
+const { Product } = require("../models");
 
 class productController {
   static async get(req, res, next) {
@@ -70,7 +70,7 @@ class productController {
   }
   static async update(req, res, next) {
     try {
-      console.log(req.body);
+      // console.log(req.body);
       // console.log(req.params);
       const { id } = req.params;
 

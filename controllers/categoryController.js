@@ -1,23 +1,52 @@
+const { Category } = require("../models");
+
 class categoryController {
-  static async get(req, res) {
+  static async get(req, res, next) {
     try {
-      console.log("masuk");
+      let categories = await Category.findAll();
+      // console.log(categories);
+      res.status(200).json({
+        message: "Succeed read categories",
+        data: categories,
+      });
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
-  static async create(req, res) {
+  static async create(req, res, next) {
     try {
-      console.log("masuk");
+      // console.log(req.body);
+      const { name } = req.body;
+
+      let createCategory = await Category.create({ name });
+
+      res.status(200).json({
+        message: "Success add new category!",
+        data: createCategory,
+      });
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
-  static async update(req, res) {
+  static async update(req, res, error) {
     try {
-      console.log("masuk");
+      const { id } = req.params;
+      const { name } = req.body;
+      // console.log(req.body,'<<<<');
+      let findToUpdate = await Category.findByPk(id);
+
+      await findToUpdate.update({ name });
+
+      // console.log(findToUpdate, "berhasil update");
+      res.status(200).json({
+        message: `Succeed update category with id ${id}`,
+        data: findToUpdate,
+      });
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 }
