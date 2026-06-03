@@ -32,7 +32,7 @@ module.exports = {
           notNull: { msg: "price is required" },
           notEmpty: { msg: "price is required" },
           min: {
-            args: [1000],
+            args: [10000],
             msg: "price minimum 1000",
           },
         },
