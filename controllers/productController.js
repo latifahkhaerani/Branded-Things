@@ -7,7 +7,7 @@ class productController {
 
       // res.send(products);
       res.status(200).json({
-        message: "Succeed read producst",
+        message: "Succeed read products",
         data: products,
       });
     } catch (error) {
