@@ -11,11 +11,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: { msg: "name is required" },
-        validate: {
-          notNull: { msg: "name is required" },
-          notEmpty: { msg: "name is required" },
-        },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

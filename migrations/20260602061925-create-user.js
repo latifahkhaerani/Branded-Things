@@ -14,22 +14,12 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: { msg: "email is required" },
+        allowNull: false,
         unique: true,
-        validate: {
-          notNull: { msg: "email is required" },
-          notEmpty: { msg: "email is required" },
-          isEmail: { msg: "invalid email format" },
-        },
       },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
-        validate: {
-          notEmpty: true,
-          notEmpty: true,
-          min: 5,
-        },
       },
       role: {
         type: Sequelize.STRING,
