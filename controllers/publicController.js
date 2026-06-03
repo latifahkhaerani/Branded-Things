@@ -1,6 +1,6 @@
 const { Category, Product } = require("../models");
 class publicController {
-  static async getProduct(req, res) {
+  static async getProduct(req, res, next) {
     try {
       const products = await Product.findAll();
 
@@ -14,7 +14,7 @@ class publicController {
       next(error);
     }
   }
-  static async detailProduct(req, res) {
+  static async detailProduct(req, res, next) {
     try {
       const { id } = req.params;
 
