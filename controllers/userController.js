@@ -1,6 +1,7 @@
 const { where } = require("sequelize");
 const { User } = require("../models");
 const { compare } = require("../helpers/bcrypt");
+const signToken = require("../helpers/jwt");
 
 class userController {
   static async addUser(req, res, next) {
@@ -59,7 +60,22 @@ class userController {
         throw { name: "LoginError" };
       }
 
-      
+      //make payload to be received at jwt
+      const payload = {
+        id: findUser.id,
+        email: findUser.email,
+        role: findUser.role,
+      };
+
+      // console.log(payload, 'kamu id,role apa?');
+
+      // generate token
+      const access_token = signToken(payload);
+
+      res.status(200).json({
+        message: "success login",
+        access_token,
+      });
     } catch (error) {
       console.log(error);
       next(error);
