@@ -11,4 +11,15 @@ function hash(pass) {
   return hash;
 }
 // hash();
-module.exports = { hash };
+
+function compare(pass, hashed) {
+  // console.log(bcrypt.compareSync(pass, hashed));
+  return bcrypt.compareSync(pass, hashed);
+  // await bcrypt.compare(pass, hashed); // true
+}
+
+// compare(
+//   "passwo123",
+//   "$2b$10$y9Ma92efgpBA/jcEBO/r8OHu7Xds.9GeHfVwJ10EnMLgpBrjj46yO",
+// );
+module.exports = { hash, compare };

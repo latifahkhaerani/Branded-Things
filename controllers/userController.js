@@ -1,4 +1,6 @@
+const { where } = require("sequelize");
 const { User } = require("../models");
+const { compare } = require("../helpers/bcrypt");
 
 class userController {
   static async addUser(req, res, next) {
@@ -31,7 +33,33 @@ class userController {
   }
   static async login(req, res, next) {
     try {
-      console.log("masuk loginnn");
+      // console.log(req.body, "<<<req bod");
+      const { email, password } = req.body;
+
+      // cari akun yg sudah login
+      let findUser = await User.findOne({
+        where: {
+          email,
+        },
+      });
+
+      // console.log(findUser,'akun siapaa?');
+      // bandingkan password yang ada dengan yg di hash
+      // console.log('berhasil login');
+      // console.log(findUser.dataValues);
+
+      // jika tidak diisi salah satu
+      if (!email || !password) throw { name: "BadRequest" };
+
+      // jika tidak terdaftar
+      if (!findUser) throw { name: "LoginError" };
+
+      // jika password tidak cocok dengan db
+      if (!compare(password, findUser.dataValues.password)) {
+        throw { name: "LoginError" };
+      }
+
+      
     } catch (error) {
       console.log(error);
       next(error);

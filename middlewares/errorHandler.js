@@ -18,6 +18,16 @@ function errorHandler(error, req, res, next) {
     status = 400;
     message = error.message;
   }
+
+  if (error.name == "LoginError") {
+    status = 401;
+    message = "Invalid email or password";
+  }
+
+  if (error.name == "BadRequest") {
+    status = 400;
+    message = "Please input email or password";
+  }
   res.status(500).json({
     message,
   });
