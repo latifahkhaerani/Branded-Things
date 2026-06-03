@@ -1,7 +1,7 @@
 const { Product, User, Category } = require("../models");
 
 class productController {
-  static async get(req, res) {
+  static async get(req, res, next) {
     try {
       const products = await Product.findAll();
 
@@ -12,12 +12,10 @@ class productController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        message: "Internal server error",
-      });
+      next(error);
     }
   }
-  static async create(req, res) {
+  static async create(req, res, next) {
     try {
       console.log(req.body);
 
@@ -46,30 +44,87 @@ class productController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        message: "Internal Server Error!",
+      next(error);
+    }
+  }
+
+  static async detail(req, res, next) {
+    try {
+      // console.log(req.params);
+      const { id } = req.params;
+
+      let detail = await Product.findByPk(id);
+
+      if (!detail) {
+        throw { name: "ID Not Found", id };
+      }
+
+      res.status(200).json({
+        message: `Succeed read detail by id ${detail.id}`,
+        data: detail,
       });
-    }
-  }
-  static async detail(req, res) {
-    try {
-      console.log("masuk");
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
-  static async update(req, res) {
+  static async update(req, res, next) {
     try {
-      console.log("masuk");
+      console.log(req.body);
+      // console.log(req.params);
+      const { id } = req.params;
+
+      const { name, description, price, stock, imgUrl, categoryId, authorId } =
+        req.body;
+
+      let findProduct = await Product.findByPk(id);
+
+      if (!findProduct) {
+        throw { name: "ID Not Found", id };
+      }
+      await findProduct.update({
+        name,
+        description,
+        price,
+        stock,
+        imgUrl,
+        categoryId,
+        authorId,
+      });
+
+      res.status(200).json({
+        message: `Succeed update product with id ${id}`,
+        data: findProduct,
+      });
     } catch (error) {
       console.log(error);
+      next(error);
+      // res.status(500).json({
+      //   message: error,
+      // });
     }
   }
-  static async delete(req, res) {
+  static async delete(req, res, next) {
     try {
-      console.log("masuk");
+      const { id } = req.params;
+
+      let findtoDelete = await Product.findByPk(id);
+
+      if (!findtoDelete) {
+        throw { name: "ID Not Found", id };
+      }
+      await findtoDelete.destroy();
+
+      res.status(200).json({
+        message: `Succeed delete product with id ${findtoDelete.id}`,
+        data: findtoDelete,
+      });
     } catch (error) {
       console.log(error);
+      next(error);
+      // res.status(500).json({
+      //   error,
+      // });
     }
   }
 }
