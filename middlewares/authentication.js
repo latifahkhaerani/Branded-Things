@@ -38,10 +38,10 @@ async function authentication(req, res, next) {
       throw { name: "Unauthorized" };
     }
 
-    //  jika ketemu, bikin object baru kedalam req
+    // jika ketemu, bikin object baru kedalam req. nanti dipake di authorization
     // console.log(req)
     req.loginInfo = {
-      id: user.id,
+      authorId: user.id,
       email: user.email,
       role: user.role,
     };

@@ -35,6 +35,12 @@ function errorHandler(error, req, res, next) {
     status = 401;
     message = "Invalid token";
   }
+
+  // authorization
+  if (error.name == "Forbidden") {
+    status = 403;
+    message = "You don't have any access";
+  }
   res.status(500).json({
     message,
   });
