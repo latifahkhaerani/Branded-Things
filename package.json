@@ -18,10 +18,12 @@
   },
   "homepage": "https://github.com/H8-FSJS-P2S5/gc01-latifahkhaerani#readme",
   "dependencies": {
+    "@imagekit/nodejs": "^7.6.2",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
     "pg": "^8.21.0",
     "sequelize": "^6.37.8",
     "sequelize-cli": "^6.6.5"

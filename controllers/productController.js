@@ -1,4 +1,5 @@
 const { Product } = require("../models");
+const ImageKit = require("@imagekit/nodejs");
 
 class productController {
   static async get(req, res, next) {
@@ -125,6 +126,49 @@ class productController {
       // res.status(500).json({
       //   error,
       // });
+    }
+  }
+  static async uploadImg(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      let findProduct = await Product.findByPk(id, {
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      });
+      // console.log(findProduct, "isi apa?");
+      if (!findProduct) {
+        throw { name: "NotFound" };
+      }
+
+      //image kit process masukin disini
+      // console.log(req.file, "filenyaaaa");
+      const client = new ImageKit({
+        privateKey: process.env["IMAGEKIT_PRIVATE_KEY"], // This is the default and can be omitted
+      });
+
+      // console.log(req.file.buffer, "filenyaaaa");
+      const response = await client.files.upload({
+        file: await ImageKit.toFile(Buffer.from(req.file.buffer), "img"),
+        fileName: req.file.originalname,
+      });
+
+      // console.log(response,'responnya'); //ada url
+
+      // finish process imageKit
+
+      //setelah dapat url, pake urlnya untuk update gambar
+      let updateImage = await findProduct.update({
+        imgUrl: response.url,
+      });
+      res.status(200).json({
+        message: "Succeed upload image",
+        imgUrl: response.url,
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   }
 }
