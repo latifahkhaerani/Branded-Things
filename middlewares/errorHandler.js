@@ -19,6 +19,7 @@ function errorHandler(error, req, res, next) {
     message = error.message;
   }
 
+  // login
   if (error.name == "LoginError") {
     status = 401;
     message = "Invalid email or password";
@@ -27,6 +28,12 @@ function errorHandler(error, req, res, next) {
   if (error.name == "BadRequest") {
     status = 400;
     message = "Please input email or password";
+  }
+
+  // no token
+  if (error.name == "Unauthorized" || error.name == "JsonWebTokenError") {
+    status = 401;
+    message = "Invalid token";
   }
   res.status(500).json({
     message,

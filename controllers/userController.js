@@ -1,7 +1,7 @@
 const { where } = require("sequelize");
 const { User } = require("../models");
 const { compare } = require("../helpers/bcrypt");
-const signToken = require("../helpers/jwt");
+const {signToken} = require("../helpers/jwt");
 
 class userController {
   static async addUser(req, res, next) {
