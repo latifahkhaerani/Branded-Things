@@ -4,29 +4,61 @@ class publicController {
   static async getProduct(req, res, next) {
     try {
       // search:
-      const { search } = req.query;
+      const { search, sort, filter } = req.query;
 
       const options = {
         where: {},
-
+        // feature sort
+        order: [
+          sort === "oldest" ? ["createdAt", "ASC"] : ["createdAt", "DESC"],
+        ],
       };
       // console.log(products, "<<<");
-
-      if (search) {
-        options.where.name = { [Op.iLike]: `%${search}%` };
-      }
-
       const products = await Product.findAll(options, {
         attributes: {
           exclude: ["updatedAt", "createdAt"],
         },
       });
+      if (search) {
+        options.where.name = { [Op.iLike]: `%${search}%` };
+      }
 
       //tambahan validasi
       if (products.length == 0) {
         throw { name: "DataEmpty" };
       }
 
+      // sorting (samaji)
+      // if (sort === "oldest") {
+      //   options.order.push(["createdAt", "ASC"]);
+      // } else {
+      //   // urutkan dari yang terbaru
+      //   options.order.push(["createdAt", "DESC"]);
+      // }
+
+      //filter product by its category
+      if (!filter) {
+        throw { name: "DataEmpty" };
+      }
+
+      if (filter) {
+        let searchCategory = await Category.findAll({
+          where: {
+            name: { [Op.iLike]: `%${filter}%` },
+          },
+        });
+
+        // console.log(searchCategory[0].id, "apa isi");
+        let getIdCategory = searchCategory.map((el) => {
+          return el.dataValues.id;
+        });
+        // console.log(getIdCategory, "idnya?");
+
+        let result = await Product.findAll({
+          where: { categoryId: { [Op.in]: getIdCategory } },
+        });
+        // console.log(result, "product apa");
+      }
 
       res.status(200).json({
         message: "Succeed read products",
