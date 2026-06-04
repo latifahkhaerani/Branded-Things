@@ -12,22 +12,15 @@ class publicController {
         order: [
           sort === "oldest" ? ["createdAt", "ASC"] : ["createdAt", "DESC"],
         ],
-      };
-      // console.log(products, "<<<");
-      const products = await Product.findAll(options, {
+        // hilangkan updated & created
         attributes: {
           exclude: ["updatedAt", "createdAt"],
         },
-      });
+      };
+
       if (search) {
         options.where.name = { [Op.iLike]: `%${search}%` };
       }
-
-      //tambahan validasi
-      if (products.length == 0) {
-        throw { name: "DataEmpty" };
-      }
-
       // sorting (samaji)
       // if (sort === "oldest") {
       //   options.order.push(["createdAt", "ASC"]);
@@ -37,10 +30,6 @@ class publicController {
       // }
 
       //filter product by its category
-      if (!filter) {
-        throw { name: "DataEmpty" };
-      }
-
       if (filter) {
         let searchCategory = await Category.findAll({
           where: {
@@ -54,10 +43,16 @@ class publicController {
         });
         // console.log(getIdCategory, "idnya?");
 
-        let result = await Product.findAll({
-          where: { categoryId: { [Op.in]: getIdCategory } },
-        });
+        options.where.categoryId = { [Op.in]: getIdCategory };
         // console.log(result, "product apa");
+      }
+
+      const products = await Product.findAll(options);
+      // console.log(products, "<<<");
+
+      //tambahan validasi
+      if (products.length == 0) {
+        throw { name: "DataEmpty" };
       }
 
       res.status(200).json({
