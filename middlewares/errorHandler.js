@@ -43,9 +43,15 @@ function errorHandler(error, req, res, next) {
   }
 
   // upload image
-    if (error.name == "ImageRequired") {
+  if (error.name == "ImageRequired") {
     status = 403;
     message = "Please upload an image";
+  }
+
+  // search feature
+  if (error.name == "DataEmpty") {
+    status = 403;
+    message = "Data is empty";
   }
 
   res.status(500).json({

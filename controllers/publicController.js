@@ -1,10 +1,33 @@
+const { where, Op } = require("sequelize");
 const { Category, Product } = require("../models");
 class publicController {
   static async getProduct(req, res, next) {
     try {
-      const products = await Product.findAll();
+      // search:
+      const { search } = req.query;
 
-      // res.send(products);
+      const options = {
+        where: {},
+
+      };
+      // console.log(products, "<<<");
+
+      if (search) {
+        options.where.name = { [Op.iLike]: `%${search}%` };
+      }
+
+      const products = await Product.findAll(options, {
+        attributes: {
+          exclude: ["updatedAt", "createdAt"],
+        },
+      });
+
+      //tambahan validasi
+      if (products.length == 0) {
+        throw { name: "DataEmpty" };
+      }
+
+
       res.status(200).json({
         message: "Succeed read products",
         data: products,
