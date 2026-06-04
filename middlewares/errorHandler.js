@@ -41,6 +41,13 @@ function errorHandler(error, req, res, next) {
     status = 403;
     message = "You don't have any access";
   }
+
+  // upload image
+    if (error.name == "ImageRequired") {
+    status = 403;
+    message = "Please upload an image";
+  }
+
   res.status(500).json({
     message,
   });

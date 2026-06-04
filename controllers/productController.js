@@ -149,6 +149,10 @@ class productController {
       });
 
       // console.log(req.file.buffer, "filenyaaaa");
+      if (!req.file) {
+        throw { name: "ImageRequired" };
+      }
+
       const response = await client.files.upload({
         file: await ImageKit.toFile(Buffer.from(req.file.buffer), "img"),
         fileName: req.file.originalname,
@@ -162,8 +166,9 @@ class productController {
       let updateImage = await findProduct.update({
         imgUrl: response.url,
       });
+
       res.status(200).json({
-        message: "Succeed upload image",
+        message: `Image ${req.file.originalname} success to update!`,
         imgUrl: response.url,
       });
     } catch (error) {
