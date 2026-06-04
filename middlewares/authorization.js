@@ -22,7 +22,13 @@ async function authorization(req, res, next) {
       console.log(req.params, "param apa berapa?");
       const productFound = await Product.findByPk(id);
 
-      console.log(productFound, "dapet produk apa nih");
+      //   console.log(productFound, "dapet produk apa nih");
+
+      if (!productFound) {
+        // cek ini dulu Logikanya: 1. Pastikan product ada, 2. Baru cek authorId
+        throw { name: "NotFound" };
+      }
+
       if (productFound.authorId !== authorId) {
         throw { name: "Forbidden" };
       }
