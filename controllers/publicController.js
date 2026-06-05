@@ -4,7 +4,14 @@ class publicController {
   static async getProduct(req, res, next) {
     try {
       // search:
-      const { search, sort, filter } = req.query;
+      const {
+        search,
+        sort,
+        filter,
+        limit = 10,
+        page = 1,
+        pagination,
+      } = req.query;
 
       const options = {
         where: {},
@@ -12,15 +19,20 @@ class publicController {
         order: [
           sort === "oldest" ? ["createdAt", "ASC"] : ["createdAt", "DESC"],
         ],
+        // pagination
+        // limit;
+        offset: limit * (page - 1),
         // hilangkan updated & created
         attributes: {
           exclude: ["updatedAt", "createdAt"],
         },
       };
 
+      // feature : search
       if (search) {
         options.where.name = { [Op.iLike]: `%${search}%` };
       }
+
       // sorting (samaji)
       // if (sort === "oldest") {
       //   options.order.push(["createdAt", "ASC"]);
@@ -29,7 +41,7 @@ class publicController {
       //   options.order.push(["createdAt", "DESC"]);
       // }
 
-      //filter product by its category
+      //feature : filter product by its category
       if (filter) {
         let searchCategory = await Category.findAll({
           where: {
@@ -47,6 +59,10 @@ class publicController {
         // console.log(result, "product apa");
       }
 
+      // feature : pagination
+      if (pagination) {
+        let data = {};
+      }
       const products = await Product.findAll(options);
       // console.log(products, "<<<");
 
