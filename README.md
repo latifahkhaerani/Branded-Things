@@ -138,6 +138,12 @@ Response (401)
 }
 ```
 
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
 Response (403)
 
 ```json
@@ -188,6 +194,11 @@ Response (401)
 }
 ```
 
+```json
+{
+  "message": "Unauthorized"
+}
+```
 ---
 
 ## POST /product
@@ -244,6 +255,12 @@ Response (401)
 ```json
 {
   "message": "Invalid token"
+}
+```
+
+```json
+{
+  "message": "Unauthorized"
 }
 ```
 
@@ -656,6 +673,13 @@ Response (200)
 ```json
 {
   "message": "Invalid token"
+}
+```
+
+
+```json
+{
+  "message": "Unauthorized"
 }
 ```
 

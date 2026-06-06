@@ -31,9 +31,14 @@ function errorHandler(error, req, res, next) {
   }
 
   // no token
-  if (error.name == "Unauthorized" || error.name == "JsonWebTokenError") {
+  if (error.name == "JsonWebTokenError") {
     status = 401;
     message = "Invalid token";
+  }
+
+  if (error.name == "Unauthorized") {
+    status = 401;
+    message = "Unauthorized";
   }
 
   // authorization
