@@ -8,7 +8,7 @@ function errorHandler(error, req, res, next) {
   }
 
   //   detail product
-  if (error.name == "ID Not Found" || error.name == "NotFound") {
+  if (error.name == "NotFound") {
     status = 400;
     message = `Data with id ${error.id} not found`;
   }

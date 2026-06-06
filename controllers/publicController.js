@@ -85,7 +85,7 @@ class publicController {
       let detail = await Product.findByPk(id);
 
       if (!detail) {
-        throw { name: "ID Not Found", id };
+        throw { name: "NotFound", id };
       }
 
       res.status(200).json({

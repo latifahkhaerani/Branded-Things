@@ -55,7 +55,7 @@ class productController {
       let detail = await Product.findByPk(id);
 
       if (!detail) {
-        throw { name: "ID Not Found", id };
+        throw { name: "NotFound", id };
       }
 
       res.status(200).json({
@@ -78,7 +78,7 @@ class productController {
       let findProduct = await Product.findByPk(id);
 
       if (!findProduct) {
-        throw { name: "ID Not Found", id };
+        throw { name: "NotFound", id };
       }
       await findProduct.update({
         name,
@@ -109,7 +109,7 @@ class productController {
       let findtoDelete = await Product.findByPk(id);
 
       if (!findtoDelete) {
-        throw { name: "ID Not Found", id };
+        throw { name: "NotFound", id };
       }
       await findtoDelete.destroy();
 
