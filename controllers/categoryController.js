@@ -21,8 +21,8 @@ class categoryController {
 
       let createCategory = await Category.create({ name });
 
-      res.status(200).json({
-        message: "Success add new category!",
+      res.status(201).json({
+        message: "Succeed add new category!",
         data: createCategory,
       });
     } catch (error) {
@@ -30,12 +30,16 @@ class categoryController {
       next(error);
     }
   }
-  static async update(req, res, error) {
+  static async update(req, res, next) {
     try {
       const { id } = req.params;
       const { name } = req.body;
       // console.log(req.body,'<<<<');
       let findToUpdate = await Category.findByPk(id);
+
+      if (!findToUpdate) {
+        throw { name: "NotFound", id };
+      }
 
       await findToUpdate.update({ name });
 

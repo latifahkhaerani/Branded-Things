@@ -1,10 +1,17 @@
-const { Product } = require("../models");
+const { Product, User } = require("../models");
 const ImageKit = require("@imagekit/nodejs");
 
 class productController {
   static async get(req, res, next) {
     try {
-      const products = await Product.findAll();
+      const products = await Product.findAll({
+        include: {
+          model: User,
+          attributes: {
+            exclude: ["password", "createdAt", "updatedAt"],
+          },
+        },
+      });
 
       // res.send(products);
       res.status(200).json({
@@ -37,7 +44,7 @@ class productController {
       delete createProduct.dataValues.updatedAt;
       delete createProduct.dataValues.createdAt;
 
-      res.status(200).json({
+      res.status(201).json({
         message: "Succeed Add New Product!",
         data: createProduct,
       });
@@ -87,7 +94,6 @@ class productController {
         stock,
         imgUrl,
         categoryId,
-        authorId,
       });
 
       res.status(200).json({
@@ -114,7 +120,7 @@ class productController {
       await findtoDelete.destroy();
 
       res.status(200).json({
-        message: `Succeed delete product with id ${findtoDelete.id}`,
+        message: `Product with id ${findtoDelete.id} success to delete`,
         data: findtoDelete,
       });
     } catch (error) {
@@ -165,7 +171,7 @@ class productController {
       });
 
       res.status(200).json({
-        message: `Image ${req.file.originalname} success to update!`,
+        message: `Image ${req.file.originalname} succeed to update!`,
         imgUrl: response.url,
       });
     } catch (error) {

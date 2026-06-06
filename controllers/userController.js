@@ -6,8 +6,6 @@ const { signToken } = require("../helpers/jwt");
 class userController {
   static async addUser(req, res, next) {
     try {
-   
-      
       console.log(req.body);
       const { username, email, password, phoneNumber, address } = req.body;
 
@@ -38,7 +36,7 @@ class userController {
     try {
       // console.log(req.body, "<<<req bod");
       const { email, password } = req.body;
-      
+
       if (!email || !password) throw { name: "BadRequest" };
 
       // cari akun yg sudah login

@@ -9,7 +9,7 @@ function errorHandler(error, req, res, next) {
 
   //   detail product
   if (error.name == "NotFound") {
-    status = 400;
+    status = 404;
     message = `Data with id ${error.id} not found`;
   }
 
@@ -57,6 +57,15 @@ function errorHandler(error, req, res, next) {
   if (error.name == "BadRequestInput") {
     status = 400;
     message = "Your input does not valid";
+  }
+
+  // register
+  if (
+    error.name == "SequelizeDatabaseError" ||
+    error.name == "SequelizeForeignKeyConstraintError"
+  ) {
+    status = 400;
+    message = "Invalid input";
   }
 
   res.status(status).json({
