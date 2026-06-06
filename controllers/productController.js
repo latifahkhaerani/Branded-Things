@@ -18,10 +18,8 @@ class productController {
   }
   static async create(req, res, next) {
     try {
-      console.log(req.body);
-
-      const { name, description, price, stock, imgUrl, categoryId, authorId } =
-        req.body;
+      const { authorId } = req.loginInfo;
+      const { name, description, price, stock, imgUrl, categoryId } = req.body;
 
       let createProduct = await Product.create({
         name,
@@ -75,8 +73,7 @@ class productController {
       // console.log(req.params);
       const { id } = req.params;
 
-      const { name, description, price, stock, imgUrl, categoryId, authorId } =
-        req.body;
+      const { name, description, price, stock, imgUrl, categoryId } = req.body;
 
       let findProduct = await Product.findByPk(id);
 

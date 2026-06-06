@@ -1,11 +1,13 @@
 const { where } = require("sequelize");
 const { User } = require("../models");
 const { compare } = require("../helpers/bcrypt");
-const {signToken} = require("../helpers/jwt");
+const { signToken } = require("../helpers/jwt");
 
 class userController {
   static async addUser(req, res, next) {
     try {
+   
+      
       console.log(req.body);
       const { username, email, password, phoneNumber, address } = req.body;
 
@@ -36,6 +38,8 @@ class userController {
     try {
       // console.log(req.body, "<<<req bod");
       const { email, password } = req.body;
+      
+      if (!email || !password) throw { name: "BadRequest" };
 
       // cari akun yg sudah login
       let findUser = await User.findOne({
@@ -50,7 +54,6 @@ class userController {
       // console.log(findUser.dataValues);
 
       // jika tidak diisi salah satu
-      if (!email || !password) throw { name: "BadRequest" };
 
       // jika tidak terdaftar
       if (!findUser) throw { name: "LoginError" };

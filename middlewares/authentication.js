@@ -53,4 +53,13 @@ async function authentication(req, res, next) {
   }
 }
 
-module.exports = authentication;
+async function authenticationAdmin(req, res, next) {
+  const { authorId } = req.loginInfo;
+  let findAuthor = await User.findByPk(authorId);
+
+  if (findAuthor.role !== "Admin") throw { name: "Forbidden" };
+  // console.log('masukk');
+  next()
+}
+
+module.exports = {authentication, authenticationAdmin};
