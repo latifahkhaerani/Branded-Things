@@ -7,6 +7,7 @@ const { sequelize } = require("../models");
 // bikin seeding before all
 let adminToken;
 let staffToken;
+let staff2Token;
 let productId;
 
 beforeAll(async () => {
@@ -57,6 +58,22 @@ beforeAll(async () => {
       id: createStaff.id,
       email: createStaff.email,
       role: createStaff.role,
+    });
+
+    let dataStaff2 = {
+      username: "jane",
+      email: "jane@example.com",
+      password: "password123",
+      role: "Staff",
+      phoneNumber: "081234567899",
+      address: "Surabaya",
+    };
+    let createStaff2 = await User.create(dataStaff2);
+
+    staff2Token = signToken({
+      id: createStaff2.id,
+      email: createStaff2.email,
+      role: createStaff2.role,
     });
 
     // cat
@@ -518,18 +535,105 @@ describe("UPDATE: PUT /product/id", () => {
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("message", "categoryId is required");
     });
+    // 6. update bukan miliknya
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 5000,
+        stock: 1,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: null,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staff2Token}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty(
+        "message",
+        "You don't have any access",
+      );
+    });
   });
 });
 
 // delete
-// describe("DELETE /product", () => {
-//   describe("Positive test case - succeed delete product", () => {
-//     test("should return an object with message and data product", async () => {});
-//   });
-//   describe("Negative test case - failed delete product", () => {
-//     test("should return an object with message and data product", async () => {});
-//   });
-//   describe("Input Validation", () => {
-//     test("should return an object with message and data product", async () => {});
-//   });
-// });
+describe("DELETE /product/:id", () => {
+  describe("Data ownership invalid", () => {
+    test("should return an object with message invalid", async () => {
+      const response = await request(app)
+        .delete(`/product/${productId}`)
+        .set("Authorization", `Bearer ${staff2Token}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty(
+        "message",
+        "You don't have any access",
+      );
+    });
+  });
+  describe("Positive test case - succeed delete product", () => {
+    test("should return an object with message and data product", async () => {
+      const response = await request(app)
+        .delete(`/product/${productId}`)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+
+      expect(response.body).toHaveProperty(
+        "message",
+        `Product with id ${productId} success to delete`,
+      );
+      expect(response.body).toHaveProperty("data", expect.any(Object));
+      expect(response.body.data).toHaveProperty("id", expect.any(Number));
+      expect(response.body.data).toHaveProperty("name", expect.any(String));
+      expect(response.body.data).toHaveProperty(
+        "description",
+        expect.any(String),
+      );
+      expect(response.body.data).toHaveProperty("price", expect.any(Number));
+      expect(response.body.data).toHaveProperty("stock", expect.any(Number));
+      expect(response.body.data).toHaveProperty("imgUrl", expect.any(String));
+      expect(response.body.data).toHaveProperty(
+        "categoryId",
+        expect.any(Number),
+      );
+      expect(response.body.data).toHaveProperty("authorId", expect.any(Number));
+    });
+  });
+  describe("Negative test case - failed delete product", () => {
+    // jika tidak login
+    test("should return an object with error message", async () => {
+      const response = await request(app).delete(`/product/${productId}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+    // jika token salah
+    test("should return an object with error message", async () => {
+      const response = await request(app)
+        .delete(`/product/${productId}`)
+        .set("Authorization", `Bearer ngasal`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message", "Invalid token");
+    });
+  });
+  describe("Input Validation", () => {
+    test("should return an object with error message", async () => {
+      const response = await request(app)
+        .delete(`/product/9999`)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Data with id undefined not found",
+      );
+    });
+  });
+});

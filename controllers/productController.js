@@ -114,6 +114,9 @@ class productController {
 
       let findtoDelete = await Product.findByPk(id);
 
+      delete findtoDelete.dataValues.updatedAt;
+      delete findtoDelete.dataValues.createdAt;
+
       if (!findtoDelete) {
         throw { name: "NotFound", id };
       }
