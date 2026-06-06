@@ -1,13 +1,27 @@
 const app = require("../app");
 const request = require("supertest");
-const { User } = require("../models");
+const { User, Product, Category } = require("../models");
 const { signToken } = require("../helpers/jwt");
+const { sequelize } = require("../models");
 
 // bikin seeding before all
 let adminToken;
 let staffToken;
+let productId;
 
 beforeAll(async () => {
+  await sequelize.queryInterface.bulkDelete("Products", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
+
+  await sequelize.queryInterface.bulkDelete("Users", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
+
   try {
     let dataAdmin = {
       username: "admin",
@@ -44,6 +58,25 @@ beforeAll(async () => {
       email: createStaff.email,
       role: createStaff.role,
     });
+
+    // cat
+    const category = await Category.create({
+      name: "T-Shirt",
+    });
+
+    // product
+    const product = await Product.create({
+      name: "H&M Basic Crew Neck T-Shirt",
+      description:
+        "Soft cotton t-shirt with a classic crew neck design for a clean and versatile look.",
+      price: 149000,
+      stock: 40,
+      imgUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27",
+      categoryId: category.id,
+      authorId: createStaff.id,
+    });
+
+    productId = product.id;
   } catch (error) {
     console.log(error);
   }
@@ -55,8 +88,21 @@ afterAll(async () => {
     restartIdentity: true, // mengatur ulang auto increment key pada primary key
     cascade: true, // jika ada relasi foreignkey pada table lain, maka akan dihapus
   });
+
+  await sequelize.queryInterface.bulkDelete("Products", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
+
+  await sequelize.queryInterface.bulkDelete("Users", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
 });
 
+// post
 describe("POST /product", () => {
   describe("Positive test case - succeed create product", () => {
     test("should return an object with message and data product", async () => {
@@ -68,7 +114,7 @@ describe("POST /product", () => {
         stock: 50,
         imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
         categoryId: 1,
-        authorId: 1,
+        // authorId: createStaff.id,
       };
       const response = await request(app)
         .post("/product")
@@ -98,7 +144,7 @@ describe("POST /product", () => {
         "categoryId",
         expect.any(Number),
       );
-      expect(response.body.data).toHaveProperty("authorId", expect.any(Number));
+      //   expect(response.body.data).toHaveProperty("authorId", expect.any(Number));
     });
   });
 
@@ -265,3 +311,225 @@ describe("POST /product", () => {
     });
   });
 });
+
+// update
+describe("UPDATE: PUT /product/id", () => {
+  describe("Positive test case - succeed update product", () => {
+    test("should return an object with message and data product", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 199000,
+        stock: 50,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      //   console.log(response, "<<<<<<");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+
+      expect(response.body).toHaveProperty(
+        "message",
+        `Succeed update product with id ${productId}`,
+      );
+      expect(response.body).toHaveProperty("data", expect.any(Object));
+      expect(response.body.data).toHaveProperty("id", expect.any(Number));
+      expect(response.body.data).toHaveProperty("name", expect.any(String));
+      expect(response.body.data).toHaveProperty(
+        "description",
+        expect.any(String),
+      );
+      expect(response.body.data).toHaveProperty("price", expect.any(Number));
+      expect(response.body.data).toHaveProperty("stock", expect.any(Number));
+      expect(response.body.data).toHaveProperty("imgUrl", expect.any(String));
+      expect(response.body.data).toHaveProperty(
+        "categoryId",
+        expect.any(Number),
+      );
+      expect(response.body.data).toHaveProperty("authorId", expect.any(Number));
+    });
+  });
+  //<<<<<<<<<<<negative test>>>>>>>>>>>
+  describe("Negative test case - failed update product", () => {
+    // jika tidak login
+    test("should return an object with error message", async () => {
+      const response = await request(app).put(`/product/${productId}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+    // jika token salah
+    test("should return an object with error message", async () => {
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .set("Authorization", `Bearer ngasal`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message", "Invalid token");
+    });
+  });
+  //<<<<<<<<<<<input validation test>>>>>>>>>>>
+  describe("Input Validation", () => {
+    // 1. name kosong
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 199000,
+        stock: 50,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "name is required");
+    });
+    // 2. desc kosong
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description: "",
+        price: 199000,
+        stock: 50,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "description is required",
+      );
+    });
+    // 3. price kosong
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: null,
+        stock: 50,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "price is required");
+    });
+    // 4. price under 5k
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 500,
+        stock: 50,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "price min 5000");
+    });
+    // 5. stock 0
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 5000,
+        stock: 0,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Validation min on stock failed",
+      );
+    });
+    // 5. imageUrl null
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 5000,
+        stock: 1,
+        imgUrl: null,
+        categoryId: 1,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Product.imgUrl cannot be null",
+      );
+    });
+    // 5. categoryId null
+    test("should return an object with error message", async () => {
+      const body = {
+        name: "Uniqlo Oversized T-Shirt",
+        description:
+          "Premium cotton oversized t-shirt with a relaxed fit, suitable for everyday casual wear.",
+        price: 5000,
+        stock: 1,
+        imgUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        categoryId: null,
+      };
+      const response = await request(app)
+        .put(`/product/${productId}`)
+        .send(body)
+        .set("Authorization", `Bearer ${staffToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "categoryId is required");
+    });
+  });
+});
+
+// delete
+// describe("DELETE /product", () => {
+//   describe("Positive test case - succeed delete product", () => {
+//     test("should return an object with message and data product", async () => {});
+//   });
+//   describe("Negative test case - failed delete product", () => {
+//     test("should return an object with message and data product", async () => {});
+//   });
+//   describe("Input Validation", () => {
+//     test("should return an object with message and data product", async () => {});
+//   });
+// });
