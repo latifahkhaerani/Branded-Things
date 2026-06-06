@@ -4,25 +4,15 @@ class publicController {
   static async getProduct(req, res, next) {
     try {
       // search:
-      const {
-        search,
-        sort,
-        filter,
-        limit = 10,
-        page = 1,
-        pagination,
-      } = req.query;
+      const { search, sort, filter, limit = 10, page = 1 } = req.query;
 
       const options = {
         where: {},
         // feature sort
-        order: [
-          sort === "oldest" ? ["createdAt", "ASC"] : ["createdAt", "DESC"],
-        ],
+        order: [],
         // pagination
-        // limit;
-        offset: limit * (page - 1),
-        // hilangkan updated & created
+        offset: +limit * (+page - 1),
+        limit: +limit,
         attributes: {
           exclude: ["updatedAt", "createdAt"],
         },
@@ -33,13 +23,20 @@ class publicController {
         options.where.name = { [Op.iLike]: `%${search}%` };
       }
 
-      // sorting (samaji)
-      // if (sort === "oldest") {
-      //   options.order.push(["createdAt", "ASC"]);
-      // } else {
-      //   // urutkan dari yang terbaru
-      //   options.order.push(["createdAt", "DESC"]);
-      // }
+      //  feature : sorting
+      if (sort) {
+        //! sorting
+        let parSort = sort[0] === "-" ? "DESC" : "ASC";
+        let sortBy = parSort === "DESC" ? sort.slice(1) : sort;
+        options.order = [[sortBy, parSort]];
+
+        // validasi field yg boleh di-sort
+        if (!["name", "price", "createdAt"].includes(sortBy)) {
+          throw { name: "BadRequestInput" };
+        }
+
+        options.order = [[sortBy, parSort]];
+      }
 
       //feature : filter product by its category
       if (filter) {
@@ -60,20 +57,21 @@ class publicController {
       }
 
       // feature : pagination
-      if (pagination) {
-        let data = {};
-      }
-      const products = await Product.findAll(options);
-      // console.log(products, "<<<");
+      let { count, rows } = await Product.findAndCountAll(options);
 
-      //tambahan validasi
-      if (products.length == 0) {
-        throw { name: "DataEmpty" };
-      }
+      let data = {
+        page: +page,
+        data: rows,
+        totalData: count,
+        totalPage: Math.ceil(count / limit),
+        dataPerPage: +limit,
+      };
+
+      // console.log(products, "<<<");
 
       res.status(200).json({
         message: "Succeed read products",
-        data: products,
+        data,
       });
     } catch (error) {
       console.log(error);

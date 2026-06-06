@@ -53,8 +53,13 @@ function errorHandler(error, req, res, next) {
     status = 403;
     message = "Data is empty";
   }
+  // search feature
+  if (error.name == "BadRequestInput") {
+    status = 400;
+    message = "Your input does not valid";
+  }
 
-  res.status(500).json({
+  res.status(status).json({
     message,
   });
 }
