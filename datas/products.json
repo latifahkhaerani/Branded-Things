@@ -88,5 +88,95 @@
     "imgUrl": "https://images.unsplash.com/photo-1506629905607-c9d6b2f7d7f3",
     "categoryId": 5,
     "authorId": 1
+  },
+  {
+    "name": "Zara Graphic T-Shirt",
+    "description": "Casual graphic t-shirt featuring modern artwork and premium cotton material.",
+    "price": 249000,
+    "stock": 45,
+    "imgUrl": "https://images.unsplash.com/photo-1583743814966-8936f37f4678",
+    "categoryId": 1,
+    "authorId": 2
+  },
+  {
+    "name": "H&M Linen Shirt",
+    "description": "Breathable linen shirt designed for warm weather and effortless style.",
+    "price": 459000,
+    "stock": 24,
+    "imgUrl": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf",
+    "categoryId": 2,
+    "authorId": 3
+  },
+  {
+    "name": "Uniqlo Dry Sweat Hoodie",
+    "description": "Lightweight hoodie with moisture-wicking technology for all-day comfort.",
+    "price": 429000,
+    "stock": 31,
+    "imgUrl": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2",
+    "categoryId": 3,
+    "authorId": 1
+  },
+  {
+    "name": "H&M Puffer Jacket",
+    "description": "Warm puffer jacket with insulated padding and a sleek urban design.",
+    "price": 999000,
+    "stock": 15,
+    "imgUrl": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246",
+    "categoryId": 4,
+    "authorId": 2
+  },
+  {
+    "name": "Zara Cargo Pants",
+    "description": "Utility-inspired cargo pants featuring multiple pockets and a relaxed fit.",
+    "price": 649000,
+    "stock": 19,
+    "imgUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f",
+    "categoryId": 5,
+    "authorId": 3
+  },
+  {
+    "name": "Uniqlo AIRism T-Shirt",
+    "description": "Breathable AIRism t-shirt engineered for comfort in hot weather.",
+    "price": 179000,
+    "stock": 60,
+    "imgUrl": "https://images.unsplash.com/photo-1503341504253-dff4815485f1",
+    "categoryId": 1,
+    "authorId": 1
+  },
+  {
+    "name": "Zara Formal Shirt",
+    "description": "Elegant formal shirt suitable for business meetings and special occasions.",
+    "price": 549000,
+    "stock": 18,
+    "imgUrl": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10",
+    "categoryId": 2,
+    "authorId": 2
+  },
+  {
+    "name": "H&M Oversized Hoodie",
+    "description": "Trendy oversized hoodie with a cozy interior and relaxed silhouette.",
+    "price": 379000,
+    "stock": 27,
+    "imgUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf",
+    "categoryId": 3,
+    "authorId": 3
+  },
+  {
+    "name": "Uniqlo BlockTech Parka",
+    "description": "Water-resistant parka offering protection from wind and light rain.",
+    "price": 1199000,
+    "stock": 14,
+    "imgUrl": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
+    "categoryId": 4,
+    "authorId": 1
+  },
+  {
+    "name": "Zara Wide Leg Trousers",
+    "description": "Fashionable wide-leg trousers with a contemporary silhouette and premium finish.",
+    "price": 699000,
+    "stock": 16,
+    "imgUrl": "https://images.unsplash.com/photo-1506629905607-c9d6b2f7d7f3",
+    "categoryId": 5,
+    "authorId": 2
   }
 ]
