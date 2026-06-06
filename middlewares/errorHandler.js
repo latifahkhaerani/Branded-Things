@@ -44,7 +44,7 @@ function errorHandler(error, req, res, next) {
 
   // upload image
   if (error.name == "ImageRequired") {
-    status = 403;
+    status = 404;
     message = "Please upload an image";
   }
 

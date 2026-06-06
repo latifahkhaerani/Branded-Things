@@ -396,7 +396,7 @@ Response (200)
 }
 ```
 
-Response (403)
+Response (404)
 
 ```json
 {
