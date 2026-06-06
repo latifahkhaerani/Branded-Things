@@ -1,12 +1,42 @@
 const app = require("../app");
 const request = require("supertest");
+const { User } = require("../models");
+const { sequelize } = require("../models");
+
+// seeding user
+beforeAll(async () => {
+  // to avoid email have been used in db
+  await sequelize.queryInterface.bulkDelete("Users", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
+
+  const data = {
+    username: "admin",
+    email: "admin@store.com",
+    password: "password123",
+    phoneNumber: "081234567890",
+    address: "Jakarta",
+  };
+
+  await User.create(data);
+});
+
+afterAll(async () => {
+  await sequelize.queryInterface.bulkDelete("Users", null, {
+    truncate: true,
+    cascade: true,
+    restartIdentity: true,
+  });
+});
 
 describe("POST /login", () => {
-  describe("positive test case - succeed login", () => {
+  describe("Positive test case - succeed login", () => {
     test("should return an object with message and access token", async () => {
       const body = { email: "admin@store.com", password: "password123" };
       const response = await request(app).post("/login").send(body);
-      console.log(response);
+      //   console.log(response);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("message", "success login");
@@ -14,7 +44,7 @@ describe("POST /login", () => {
     });
   });
 
-  describe("negative test case - failed login", () => {
+  describe("Negative test case - failed login", () => {
     // jika email kosong
     test("should return an object with error message", async () => {
       const body = { email: "", password: "password123" };
@@ -38,6 +68,9 @@ describe("POST /login", () => {
         "Please input email or password",
       );
     });
+  });
+
+  describe("Input Validation", () => {
     // jika email tidak valid
     test("should return an object with error message", async () => {
       const body = { email: "ain@store.com", password: "password123" };
@@ -58,7 +91,7 @@ describe("POST /login", () => {
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty(
         "message",
-        "Invalid email or passwor",
+        "Invalid email or password",
       );
     });
   });
