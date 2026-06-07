@@ -23,80 +23,76 @@ beforeAll(async () => {
     restartIdentity: true,
   });
 
-  try {
-    let dataAdmin = {
-      username: "admin",
-      email: "admin@mail.com",
-      password: "password123",
-      role: "Admin",
-      phoneNumber: "081234567890",
-      address: "Jakarta",
-    };
+  let dataAdmin = {
+    username: "admin",
+    email: "admin@mail.com",
+    password: "password123",
+    role: "Admin",
+    phoneNumber: "081234567890",
+    address: "Jakarta",
+  };
 
-    let createAdmin = await User.create(dataAdmin);
+  let createAdmin = await User.create(dataAdmin);
 
-    adminToken = signToken({
-      id: createAdmin.id,
-      email: createAdmin.email,
-      role: createAdmin.role,
-    });
+  adminToken = signToken({
+    id: createAdmin.id,
+    email: createAdmin.email,
+    role: createAdmin.role,
+  });
 
-    //   console.log(adminToken, "<<<<<<");
+  //   console.log(adminToken, "<<<<<<");
 
-    //   user
-    let dataStaff = {
-      username: "john",
-      email: "john@example.com",
-      password: "password123",
-      role: "Staff",
-      phoneNumber: "081377788899",
-      address: "Surabaya",
-    };
-    let createStaff = await User.create(dataStaff);
+  //   user
+  let dataStaff = {
+    username: "john",
+    email: "john@example.com",
+    password: "password123",
+    role: "Staff",
+    phoneNumber: "081377788899",
+    address: "Surabaya",
+  };
+  let createStaff = await User.create(dataStaff);
 
-    staffToken = signToken({
-      id: createStaff.id,
-      email: createStaff.email,
-      role: createStaff.role,
-    });
+  staffToken = signToken({
+    id: createStaff.id,
+    email: createStaff.email,
+    role: createStaff.role,
+  });
 
-    let dataStaff2 = {
-      username: "jane",
-      email: "jane@example.com",
-      password: "password123",
-      role: "Staff",
-      phoneNumber: "081234567899",
-      address: "Surabaya",
-    };
-    let createStaff2 = await User.create(dataStaff2);
+  let dataStaff2 = {
+    username: "jane",
+    email: "jane@example.com",
+    password: "password123",
+    role: "Staff",
+    phoneNumber: "081234567899",
+    address: "Surabaya",
+  };
+  let createStaff2 = await User.create(dataStaff2);
 
-    staff2Token = signToken({
-      id: createStaff2.id,
-      email: createStaff2.email,
-      role: createStaff2.role,
-    });
+  staff2Token = signToken({
+    id: createStaff2.id,
+    email: createStaff2.email,
+    role: createStaff2.role,
+  });
 
-    // cat
-    const category = await Category.create({
-      name: "T-Shirt",
-    });
+  // cat
+  const category = await Category.create({
+    name: "T-Shirt",
+  });
 
-    // product
-    const product = await Product.create({
-      name: "H&M Basic Crew Neck T-Shirt",
-      description:
-        "Soft cotton t-shirt with a classic crew neck design for a clean and versatile look.",
-      price: 149000,
-      stock: 40,
-      imgUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27",
-      categoryId: category.id,
-      authorId: createStaff.id,
-    });
+  // product
+  const product = await Product.create({
+    name: "H&M Basic Crew Neck T-Shirt",
+    description:
+      "Soft cotton t-shirt with a classic crew neck design for a clean and versatile look.",
+    price: 149000,
+    stock: 40,
+    imgUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27",
+    categoryId: category.id,
+    authorId: createStaff.id,
+  });
 
-    productId = product.id;
-  } catch (error) {
-    console.log(error);
-  }
+  productId = product.id;
 });
 // bikin seeding after all
 afterAll(async () => {
