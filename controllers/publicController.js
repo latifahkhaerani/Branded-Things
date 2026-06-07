@@ -82,7 +82,11 @@ class publicController {
     try {
       const { id } = req.params;
 
-      let detail = await Product.findByPk(id);
+      let detail = await Product.findByPk(id, {
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      });
 
       if (!detail) {
         throw { name: "NotFound", id };
