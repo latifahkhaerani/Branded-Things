@@ -13,7 +13,7 @@ const authorization = require("../middlewares/authorization");
 
 router.get("/pub/product", publicController.getProduct);
 router.get("/pub/category", publicController.getCategory);
-router.get("/pub/:id", publicController.detailProduct);
+router.get("/pub/product/:id", publicController.detailProduct);
 
 router.post("/login", userController.login);
 
